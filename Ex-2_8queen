@@ -1,0 +1,52 @@
+class EightQueens:
+    def __init__(self):
+        self.board = [[0 for _ in range(8)] for _ in range(8)]
+
+    def print_solution(self):
+        for i in range(8):
+            for j in range(8):
+                print(self.board[i][j], end=" ")
+            print()
+
+    def is_safe(self, row, col):
+        # Check this row on left side
+        for i in range(col):
+            if self.board[row][i] == 1:
+                return False
+
+        # Check upper diagonal on left side
+        for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+            if self.board[i][j] == 1:
+                return False
+
+        # Check lower diagonal on left side
+        for i, j in zip(range(row, 8, 1), range(col, -1, -1)):
+            if self.board[i][j] == 1:
+                return False
+
+        return True
+
+    def solve_queens(self, col):
+        if col >= 8:
+            return True
+
+        for i in range(8):
+            if self.is_safe(i, col):
+                self.board[i][col] = 1
+
+                if self.solve_queens(col + 1):
+                    return True
+
+                # Backtrack
+                self.board[i][col] = 0
+
+        return False
+
+
+if __name__ == "__main__":
+    chessboard = EightQueens()
+    if chessboard.solve_queens(0):
+        print("Solution exists. The positions of the queens are:")
+        chessboard.print_solution()
+    else:
+        print("Solution does not exist.")
