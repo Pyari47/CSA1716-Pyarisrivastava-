@@ -1,0 +1,46 @@
+class TicTacToe:
+    def __init__(self):
+        self.board = [' ' for _ in range(9)]  # Initialize the board with empty spaces
+        self.current_player = 'X'  # Player 'X' starts the game
+
+    def print_board(self):
+        print('-------------')
+        for i in range(0, 9, 3):
+            print(f'| {self.board[i]} | {self.board[i+1]} | {self.board[i+2]} |')
+            print('-------------')
+
+    def make_move(self, position):
+        if 0 <= position < 9 and self.board[position] == ' ':
+            self.board[position] = self.current_player
+            return True
+        return False
+
+    def switch_player(self):
+        self.current_player = 'O' if self.current_player == 'X' else 'X'
+
+    def check_winner(self):
+        # Check rows, columns, and diagonals for a winner
+        lines = [(0, 1, 2), (3, 4, 5), (6, 7, 8), (0, 3, 6), (1, 4, 7), (2, 5, 8), (0, 4, 8), (2, 4, 6)]
+        for line in lines:
+            if self.board[line[0]] == self.board[line[1]] == self.board[line[2]] != ' ':
+                return self.board[line[0]]
+        return None
+
+if __name__ == "__main__":
+    game = TicTacToe()
+    while True:
+        game.print_board()
+        position = int(input(f"Player {game.current_player}, enter your position (0-8): "))
+        if game.make_move(position):
+            winner = game.check_winner()
+            if winner:
+                game.print_board()
+                print(f"Player {winner} wins!")
+                break
+            elif ' ' not in game.board:
+                game.print_board()
+                print("It's a tie!")
+                break
+            game.switch_player()
+        else:
+            print("Invalid move. Try again.")
